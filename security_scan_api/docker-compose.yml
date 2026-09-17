@@ -1,0 +1,22 @@
+services:
+
+  postgres:
+    image: postgres:17
+    container_name: security_scan_postgres
+    environment:
+      POSTGRES_DB: security_scan
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:8
+    container_name: security_scan_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
