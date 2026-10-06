@@ -75,8 +75,11 @@ class TargetSnapshot(Base):
 
     jobs: Mapped[list["Job"]] = relationship(
         back_populates="target_snapshot",
+        passive_deletes=True,
     )
 
     observations: Mapped[list["Observation"]] = relationship(
         back_populates="target_snapshot",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
