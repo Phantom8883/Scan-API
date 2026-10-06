@@ -65,9 +65,9 @@ Developer-friendly remediation
 │                                                              │
 │                         DJANGO                               │
 │                                                              │
-│ users / organizations / projects / billing / permissions    │
-│ targets / scope / verification / configuration / admin      │
-│ findings / reports / audit / business workflows             │
+│ users / organizations / projects / billing / permissions     │
+│ targets / scope / verification / configuration / admin       │
+│ findings / reports / audit / business workflows              │
 └──────────────────────────────┬───────────────────────────────┘
                                │
                          API / Events
@@ -163,7 +163,7 @@ FastAPI владеет **техническим выполнением**.
                                             │
                                             ▼
                               ┌────────────────────────┐
-                              │      MESSAGE BUS        │
+                              │      MESSAGE BUS       │
                               │                        │
                               │ Redis / RabbitMQ       │
                               │ Celery                 │

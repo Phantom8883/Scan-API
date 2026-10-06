@@ -7,4 +7,5 @@ redis
 celery
 httpx
 pytest
-pytest-asyncio  
+pytest-asyncio
+email-validator
