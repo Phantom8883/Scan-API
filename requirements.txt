@@ -9,3 +9,4 @@ httpx
 pytest
 pytest-asyncio
 email-validator
+argon2-cffi

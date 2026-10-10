@@ -28,4 +28,9 @@ async def get_session():
     """
 
     async with SessionLocal() as session:
-        yield session
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
