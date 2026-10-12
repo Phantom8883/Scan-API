@@ -3,7 +3,6 @@ from uuid import UUID
 
 from sqlalchemy import select, update as sa_update, delete as sa_delete
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.models import User
 
 from .base_repository import AbstractRepository, ModelType
 

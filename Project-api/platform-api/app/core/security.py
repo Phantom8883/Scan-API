@@ -1,23 +1,17 @@
 
-from concurrent.futures import
-from argon2 import PasswordHasher
-from argon2.exceptions import Argon2Error
-
-
-
-
-
-# app/core/security.py
 from concurrent.futures import ThreadPoolExecutor
 import asyncio
 
-_hash_executor = ThreadPoolExecutor(max_workers=4)  # отдельный, не общий пул
+from argon2 import PasswordHasher
+from argon2.exceptions import Argon2Error
 
-async def hash_password_async(password: str) -> str:
-    loop = asyncio.get_running_loop()
-    return await loop.run_in_executor(_hash_executor, hash_password, password)
+from .async_utils import run_sync_in_thread
+from .config import HASH_THREAD_POOL_SIZE
+
+
 
 ph = PasswordHasher()
+_hash_executor = ThreadPoolExecutor(max_workers=HASH_THREAD_POOL_SIZE) # отдельный, не общий пул
 
 
 def hash_password(password: str) -> str:
@@ -27,15 +21,16 @@ def hash_password(password: str) -> str:
     return ph.hash(password)
 
 
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Сверяет введённый пароль с хэшем из БД.
     """
     try:
-        ph.verify(hashed_password, plain_password)
-        return True
+        return ph.verify(hashed_password, plain_password)
     except Argon2Error:
         return False
 
 
-
+hash_password_async = run_sync_in_thread(_hash_executor)(hash_password)
+verify_password_async = run_sync_in_thread(_hash_executor)(verify_password)
