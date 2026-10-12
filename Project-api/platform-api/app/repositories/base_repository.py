@@ -1,8 +1,15 @@
 from abc import ABC, abstractmethod
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeVar, Protocol
 from uuid import UUID
 
-ModelType = TypeVar("ModelType")
+
+
+class _HasId(Protocol):
+    id: Any
+
+
+ModelType = TypeVar("ModelType", bound=_HasId)
+
 
 class AbstractRepository(ABC, Generic[ModelType]):
     """
