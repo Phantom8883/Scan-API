@@ -63,3 +63,9 @@ class User(Base):
     assessments: Mapped[list["Assessment"]] = relationship(
         back_populates="created_by_user",
     )
+
+    # Keep execution history and let the database restrict deleting referenced users.
+    executions: Mapped[list["Execution"]] = relationship(
+        back_populates="user",
+        passive_deletes="all",
+    )
