@@ -64,7 +64,7 @@ class User(Base):
         back_populates="created_by_user",
     )
 
-    # Keep execution history and let the database restrict deleting referenced users.
+    # Сохраняем историю запусков: БД запретит удалять пользователя, на которого есть ссылки.
     executions: Mapped[list["Execution"]] = relationship(
         back_populates="user",
         passive_deletes="all",
