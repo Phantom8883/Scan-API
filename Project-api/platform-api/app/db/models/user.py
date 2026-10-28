@@ -63,3 +63,9 @@ class User(Base):
     assessments: Mapped[list["Assessment"]] = relationship(
         back_populates="created_by_user",
     )
+
+    # Сохраняем историю запусков: БД запретит удалять пользователя, на которого есть ссылки.
+    executions: Mapped[list["Execution"]] = relationship(
+        back_populates="user",
+        passive_deletes="all",
+    )

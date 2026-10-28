@@ -82,6 +82,11 @@ class Assessment(Base):
         cascade="all, delete-orphan",
     )
 
+    executions: Mapped[list["Execution"]] = relationship(
+        back_populates="assessment",
+        cascade="all, delete-orphan",
+    )
+
 
 class AssessmentTarget(Base):
     __tablename__ = "assessment_targets"
