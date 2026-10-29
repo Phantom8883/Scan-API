@@ -279,14 +279,25 @@ AssessmentCreated → ExecutionStarted → ReconRequested → ReconCompleted
 - `db/session.py` с commit/rollback на уровне запроса
 - TCP connect scan (базовый, на asyncio.open_connection)
 
-**Не начато:**
+**Модели и схемы готовы, бизнес-логика — нет** (важное уточнение: слой данных для анализа гораздо полнее, чем казалось раньше):
+- `SecurityHypothesis`, `HypothesisObservation` — модель + схема есть
+- `ValidationPlan`, `ValidationRun`, `ValidationResult` — модель + схема есть
+- `Evidence` — модель + схема есть
+- `FindingCandidate`, `FindingObservation`, `Finding` — модель + схема есть
+- `Report` — модель + схема есть
+
+Полный разбор каждой сущности, что она значит и как связана с остальными — в `data-model-reference.md`.
+
+**Не начато по-настоящему:**
 - Ни один реальный защищённый бизнес-роут (targets/assessments/jobs CRUD) — `get_current_user`/`require_org_role` написаны, но ещё не применены ни на одном роуте
 - Celery-воркеры — вообще не подключены, Job создаётся в БД, но ничего реально не исполняет
 - Banner grabbing, DNS/TLS/HTTP recon-воркеры
-- Scope/Policy Engine
-- Attack Surface / Hypothesis / Validation / Vulnerability Feed / Findings / Risk Engine — весь слой целиком
-- Object Storage
-- WebSocket, Audit Log
+- Scope/Policy Engine как явный сервис (сейчас это только поле `scope_metadata` в `TargetSnapshot`, без своей логики принятия решений)
+- Сама бизнес-логика Attack Surface / Validation / Risk Engine (таблицы для их результатов есть, вычисляющего кода — нет)
+- Vulnerability Intelligence Service — модели `VulnerabilityRecord` нет вообще, нужно создавать с нуля
+- Audit Log — модели `AuditLog` нет вообще, нужно создавать с нуля
+- Object Storage — интеграция с MinIO/S3 (поля `storage_key`/`storage_provider` в `Evidence`/`Report` уже предусмотрены, самого клиента для записи файлов нет)
+- WebSocket
 
 ---
 

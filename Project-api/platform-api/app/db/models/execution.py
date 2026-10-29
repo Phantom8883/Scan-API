@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID, uuid4
 
-from sqlalchemy import JSON, String, Uuid, func
+from sqlalchemy import ForeignKey, JSON, String, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -20,18 +20,18 @@ class Execution(Base):
         default=uuid4,
     )
 
-    # ID Assessment из platform-api.
-    # Это внешний UUID, не ForeignKey.
+    # Assessment, для которого выполняется технический запуск.
     assessment_id: Mapped[UUID] = mapped_column(
         Uuid(as_uuid=True),
+        ForeignKey("assessments.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
 
-    # ID пользователя из platform-api.
-    # Тоже внешний UUID.
+    # Пользователь, инициировавший технический запуск.
     user_id: Mapped[UUID] = mapped_column(
         Uuid(as_uuid=True),
+        ForeignKey("users.id"),
         nullable=False,
         index=True,
     )
@@ -78,6 +78,14 @@ class Execution(Base):
 
     finished_at: Mapped[datetime | None] = mapped_column(
         nullable=True,
+    )
+
+    assessment: Mapped["Assessment"] = relationship(
+        back_populates="executions",
+    )
+
+    user: Mapped["User"] = relationship(
+        back_populates="executions",
     )
 
     target_snapshots: Mapped[list["TargetSnapshot"]] = relationship(

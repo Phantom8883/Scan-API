@@ -19,7 +19,9 @@ from .config import (
 
 
 
-
+DUMMY_PASSWORD_HASH = (
+    "$argon2id$v=19$m=65536,t=3,p=4$rGSURLqH9QUQm7PutSB+rA$ix5l1HcRyuY9JG52n+fUov+QnkY5u3weD37iEvZ2+tw"
+)
 # Хеш
 ph = PasswordHasher()
 _hash_executor = ThreadPoolExecutor(max_workers=HASH_THREAD_POOL_SIZE) # отдельный, не общий пул
