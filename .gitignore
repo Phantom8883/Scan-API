@@ -16,12 +16,9 @@ Thumbs.db
 
 # Logs
 *.log
-
-
 *.pyc
 
 # Secrets
 .env
-.txt
-.md
-.md
+*.txt
+*.md
