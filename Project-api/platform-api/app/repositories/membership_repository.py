@@ -17,8 +17,9 @@ class MembershipRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-
-    async def get(self, user_id: UUID, organization_id: UUID) -> OrganizationMembership | None:
+    async def get(
+        self, user_id: UUID, organization_id: UUID
+    ) -> OrganizationMembership | None:
         stmt = select(OrganizationMembership).filter_by(
             user_id=user_id,
             organization_id=organization_id,

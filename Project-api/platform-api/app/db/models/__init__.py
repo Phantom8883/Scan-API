@@ -35,7 +35,6 @@ from app.db.models.finding import (
     FindingObservation,
 )
 
-
 __all__ = [
     "User",
     "Organization",
@@ -60,5 +59,3 @@ __all__ = [
     "FindingCandidate",
     "FindingObservation",
 ]
-
-

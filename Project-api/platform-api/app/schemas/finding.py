@@ -4,8 +4,6 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 
-
-
 class FindingCandidateRead(BaseModel):
     model_config = ConfigDict(
         from_attributes=True,
@@ -30,6 +28,7 @@ class FindingCandidateRead(BaseModel):
 
     created_at: datetime
 
+
 class FindingCandidateDetail(FindingCandidateRead):
     """
     Candidate вместе с ID наблюдений,
@@ -37,8 +36,6 @@ class FindingCandidateDetail(FindingCandidateRead):
     """
 
     observation_ids: list[UUID]
-
-
 
 
 class FindingCreate(BaseModel):
@@ -72,5 +69,3 @@ class FindingRead(BaseModel):
     remediation: str | None
 
     created_at: datetime
-
-    

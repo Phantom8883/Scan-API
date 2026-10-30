@@ -9,7 +9,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
 
-
 class FindingObservation(Base):
     __tablename__ = "finding_observations"
 
@@ -113,7 +112,6 @@ class FindingCandidate(Base):
         back_populates="finding_candidates",
     )
 
-
     hypothesis_id: Mapped[UUID | None] = mapped_column(
         Uuid(as_uuid=True),
         ForeignKey(
@@ -137,8 +135,6 @@ class FindingCandidate(Base):
     hypothesis: Mapped["SecurityHypothesis | None"] = relationship()
 
     validation_run: Mapped["ValidationRun | None"] = relationship()
-
-
 
 
 class Finding(Base):

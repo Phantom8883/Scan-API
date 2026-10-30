@@ -66,8 +66,6 @@ from app.schemas.validation import (
     ValidationResultRead,
 )
 
-
-
 __all__ = [
     "UserCreate",
     "UserLogin",
@@ -101,7 +99,3 @@ __all__ = [
     "ValidationRunRead",
     "ValidationResultRead",
 ]
-
-
-
-

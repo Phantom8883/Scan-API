@@ -1,11 +1,10 @@
-import os 
+import os
 
 from sqlalchemy.ext.asyncio import (
-    AsyncSession, 
+    AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
-
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 
@@ -20,6 +19,7 @@ SessionLocal = async_sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False,
 )
+
 
 async def get_session():
     """

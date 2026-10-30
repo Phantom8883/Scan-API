@@ -1,11 +1,12 @@
-import asyncio 
+import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from functools import wraps
 from typing import Callable, TypeVar, ParamSpec, Coroutine, Any
 
-
-P = ParamSpec("P") # Описывает сигнатуру параметров - сколько их, какие имена, какие типы и т.д.
-R = TypeVar("R")   # Placeholder для одного типа
+P = ParamSpec(
+    "P"
+)  # Описывает сигнатуру параметров - сколько их, какие имена, какие типы и т.д.
+R = TypeVar("R")  # Placeholder для одного типа
 
 
 def run_sync_in_thread(executor: ThreadPoolExecutor | None = None):
@@ -21,5 +22,7 @@ def run_sync_in_thread(executor: ThreadPoolExecutor | None = None):
         async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             loop = asyncio.get_running_loop()
             return await loop.run_in_executor(executor, lambda: func(*args, **kwargs))
+
         return wrapper
+
     return decorator

@@ -8,15 +8,13 @@ from ..db.models.user import User
 from ..schemas.user import UserCreate, UserLogin
 from ..schemas.auth import RefreshRequest, TokenPair
 from ..core.security import (
-    hash_password_async, 
-    verify_password_async, 
-    create_access_token, 
+    hash_password_async,
+    verify_password_async,
+    create_access_token,
     create_refresh_token,
     decode_token,
     DUMMY_PASSWORD_HASH,
-    )
-
-
+)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -27,14 +25,15 @@ async def register(
     service: BaseService[User] = Depends(get_user_service),
 ):
 
-
     existing = await service.repository.get_single(email=data.email)
     hashed = await hash_password_async(data.password)
 
     if existing is None:
         await service.create(name=data.name, email=data.email, password_hash=hashed)
 
-    return {"message": "Если этот email ещё не зарегистрирован, аккаунт создан. Проверьте почту."}
+    return {
+        "message": "Если этот email ещё не зарегистрирован, аккаунт создан. Проверьте почту."
+    }
 
 
 @router.post("/login")
@@ -51,7 +50,9 @@ async def login(
     is_valid = await verify_password_async(data.password, password_hash)
 
     if user is None or not is_valid:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Неверный email или пароль")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Неверный email или пароль"
+        )
 
     return {
         "access_token": create_access_token(user.id),
@@ -68,15 +69,20 @@ async def refresh(
     try:
         payload = decode_token(data.refresh_token)
     except jwt.InvalidTokenError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Невалидный refresh-токен")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Невалидный refresh-токен"
+        )
 
     if payload.get("type") != "refresh":
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Невалидный refresh-токен")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Невалидный refresh-токен"
+        )
 
     user = await service.get(UUID(payload["sub"]))
     if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Невалилный refresh-токен")
-
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Невалилный refresh-токен"
+        )
 
     return TokenPair(
         access_token=create_access_token(user.id),

@@ -3,6 +3,7 @@ from uuid import UUID
 
 from app.repositories.base_repository import AbstractRepository, ModelType
 
+
 class BaseService(Generic[ModelType]):
     """
     Тонкая обертка над репозиторием.
@@ -20,7 +21,9 @@ class BaseService(Generic[ModelType]):
     async def get(self, pk: UUID) -> ModelType | None:
         return await self.repository.get_single(id=pk)
 
-    async def list(self, *, limit: int = 100, offset: int = 0, **filters: Any) -> list[ModelType]:
+    async def list(
+        self, *, limit: int = 100, offset: int = 0, **filters: Any
+    ) -> list[ModelType]:
         return await self.repository.get_multi(limit=limit, offset=offset, **filters)
 
     async def update(self, pk: UUID, **fields: Any) -> ModelType | None:
@@ -28,4 +31,3 @@ class BaseService(Generic[ModelType]):
 
     async def delete(self, pk: UUID) -> None:
         await self.repository.delete(pk)
-        

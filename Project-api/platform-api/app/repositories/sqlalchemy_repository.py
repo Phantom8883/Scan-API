@@ -9,18 +9,14 @@ from .base_repository import AbstractRepository, ModelType
 
 class SqlAlchemyRepository(AbstractRepository[ModelType], Generic[ModelType]):
     """
-    Сюда передаётся УЖЕ ГОТОВАЯ сессия на один HTTP-запрos
-    (та, что отдаёт get_db dependency) - а не фабрика сессий,
-    как было в разобранном нами шаблоне (там это и было багом:
-    аннотация типа врала, что это AsyncSession, а вызывалась она
-    как функция-фабрика).
+    Сюда передаётся готовая сессия на один HTTP-запрos
+    (та, что отдаёт get_db dependency) - а не фабрика сессий
 
     Репозиторий НЕ управляет жизненным циклом сессии и НЕ делает commit —
     этим будет заниматься сервис (или вызывающий код). Если бы репозиторий
     сам коммитил, то сервис, которому нужно изменить два репозитория
     в одной транзакции, не смог бы откатить оба разом при ошибке.
     """
-
 
     def __init__(self, model: Type[ModelType], session: AsyncSession):
         self.model = model
@@ -39,7 +35,12 @@ class SqlAlchemyRepository(AbstractRepository[ModelType], Generic[ModelType]):
         return result.scalar_one_or_none()
 
     async def get_multi(
-        self, *, order_by: str = "created_at", limit: int = 100, offset: int = 0, **filters: Any
+        self,
+        *,
+        order_by: str = "created_at",
+        limit: int = 100,
+        offset: int = 0,
+        **filters: Any
     ) -> list[ModelType]:
         column = getattr(self.model, order_by)
         stmt = (

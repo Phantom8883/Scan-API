@@ -3,7 +3,6 @@ from typing import Any, Generic, TypeVar, Protocol
 from uuid import UUID
 
 
-
 class _HasId(Protocol):
     id: Any
 
@@ -27,7 +26,9 @@ class AbstractRepository(ABC, Generic[ModelType]):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_multi(self, *, limit: int = 100, offset: int = 0, **filters: Any) -> list[ModelType]:
+    async def get_multi(
+        self, *, limit: int = 100, offset: int = 0, **filters: Any
+    ) -> list[ModelType]:
         raise NotImplementedError
 
     @abstractmethod
