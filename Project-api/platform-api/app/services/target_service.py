@@ -11,9 +11,9 @@ class TargetService(BaseService[Target]):
         super().__init__(repository)
         self.repository: TargetRepository = repository
 
-        async def list_for_organization(
-            self, organization_id: UUID, *, limit: int = 100, offset: int = 0
-        ) -> list[Target]:
-            return await self.repository.get_by_organization(
-                organization_id, limit=limit, offset=offset
-            )
+    async def list_for_organization(
+        self, organization_id: UUID, *, limit: int = 100, offset: int = 0
+    ) -> list[Target]:
+        return await self.repository.get_by_organization(
+            organization_id, limit=limit, offset=offset
+        )
