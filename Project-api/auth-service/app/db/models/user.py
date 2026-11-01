@@ -40,6 +40,13 @@ class User(Base):
         nullable=False,
     )
 
+    platform_role: Mapped[str] = mapped_column(
+        String(32), 
+        nullable=False,
+        default="user",
+        server_default="user",
+    )
+
     # Позволяет отключить пользователя.
     is_active: Mapped[bool] = mapped_column(
         Boolean,

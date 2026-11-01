@@ -1,22 +1,64 @@
 services:
-
-  postgres:
-    image: postgres:17
-    container_name: security_scan_postgres
+  auth-db:
+    image: postgres:16
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: security_scan
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: auth_password
+      POSTGRES_DB: auth_db
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - auth_db_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  core-db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: core_user
+      POSTGRES_PASSWORD: core_password
+      POSTGRES_DB: core_db
+    volumes:
+      - core_db_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
 
   redis:
-    image: redis:8
-    container_name: security_scan_redis
+    image: redis:7
+    restart: unless-stopped
     ports:
       - "6379:6379"
 
+  auth-service:
+    build:
+      context: ./Project-api/auth-service
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://auth_user:auth_password@auth-db:5432/auth_db
+    depends_on:
+      - auth-db
+    ports:
+      - "8001:8000"
+
+  core-service:
+    build:
+      context: ./Project-api/core-service
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://core_user:core_password@core-db:5432/core_db
+      REDIS_URL: redis://redis:6379/0
+      AUTH_SERVICE_URL: http://auth-service:8000
+    depends_on:
+      - core-db
+      - redis
+      - auth-service
+    ports:
+      - "8000:8000"
+
 volumes:
-  postgres_data:
+  auth_db_data:
+  core_db_data:
